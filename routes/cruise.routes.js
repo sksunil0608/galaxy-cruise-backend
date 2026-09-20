@@ -1,0 +1,23 @@
+const express = require("express")
+const router = express.Router()
+
+const CruiseController = require("../Controller/CruiseController")
+const auth = require("../middleware/auth")
+const permission = require("../middleware/permission")
+
+router.post("/",auth,permission("cruises.create"),CruiseController.create)
+router.post("/import",auth,permission("cruises.create"),CruiseController.bulkImport)
+router.get("/search",auth,permission("cruises.view"),CruiseController.search)
+router.get("/tags",auth,permission("cruises.view"),CruiseController.listTags)
+router.get("/price-alerts",auth,permission("cruises.view"),CruiseController.listPriceAlerts)
+router.put("/price-alerts/:alertId/read",auth,permission("cruises.view"),CruiseController.markPriceAlertRead)
+router.get("/overview",auth,permission("cruises.view"),CruiseController.overview)
+router.get("/compare",auth,permission("cruises.view"),CruiseController.compare)
+router.post("/:code/tags",auth,permission("cruises.update"),CruiseController.addTag)
+router.put("/:code/tags/:tagId",auth,permission("cruises.update"),CruiseController.updateTag)
+router.delete("/:code/tags/:tagId",auth,permission("cruises.update"),CruiseController.removeTag)
+router.get("/:code/categories/:categoryCode/cabins",auth,permission("cruises.view"),CruiseController.getCategoryDecks)
+router.get("/:code",auth,permission("cruises.view"),CruiseController.getOne)
+router.put("/:code",auth,permission("cruises.update"),CruiseController.update)
+router.delete("/:code",auth,permission("cruises.delete"),CruiseController.remove)
+module.exports = router

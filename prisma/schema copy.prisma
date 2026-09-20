@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role_id   Int
+  role      Role     @relation(fields: [role_id], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String
+  permissions RolePermission[]
+  users       User[]
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  key             String           @unique
+  name            String
+  rolePermissions RolePermission[]
+}
+
+model RolePermission {
+  id            Int @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+
+  role       Role       @relation(fields: [role_id], references: [id])
+  permission Permission @relation(fields: [permission_id], references: [id])
+
+  @@unique([role_id, permission_id])
+}
+
+model Vendor {
+  id   Int     @id @default(autoincrement())
+  name String
+  slug String? @unique
+  url  String?
+
+  cruises Cruise[]
+}
+
+model Cruise {
+  id Int @id @default(autoincrement())
+
+  vendor_id Int
+  vendor    Vendor @relation(fields: [vendor_id], references: [id])
+
+  ship        String?
+  package     String?
+  packageCode String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  portFrom String?
+  portTo   String?
+
+  nights   Int?
+  price    Decimal? @db.Decimal(10, 2)
+  currency String?
+
+  promo String? @db.LongText
+
+  createdAt DateTime @default(now())
+
+  @@index([vendor_id])
+}
+
