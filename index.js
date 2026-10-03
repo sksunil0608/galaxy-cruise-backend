@@ -69,7 +69,6 @@ app.use((err, req, res, next) => {
   })
 })
 
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
 app.listen(PORT, () => {
   console.log(`[SERVER] Running on port ${PORT} | Version ${VERSION} | Env: ${process.env.NODE_ENV || "development"}`)
 })

@@ -25,6 +25,7 @@ model User {
   activities UserActivity[]
 
   @@index([roleId])
+  @@map("user")
 }
 
 model UserActivity {
@@ -50,6 +51,8 @@ model Role {
 
   permissions RolePermission[]
   users       User[]
+
+  @@map("role")
 }
 
 model Permission {
@@ -58,6 +61,8 @@ model Permission {
   name  String
 
   roles RolePermission[]
+
+  @@map("permission")
 }
 
 model RolePermission {
@@ -71,6 +76,7 @@ model RolePermission {
 
   @@unique([roleId, permissionId])
   @@index([permissionId])
+  @@map("rolepermission")
 }
 
 //////////////////////////////////////////////////////
@@ -86,6 +92,8 @@ model Vendor {
   ships    Ship[]
   cruises  Cruise[]
   runs     VendorRun[]
+
+  @@map("vendor")
 }
 
 model VendorRun {
@@ -107,6 +115,7 @@ model VendorRun {
 
   @@index([vendorId])
   @@index([finishedAt])
+  @@map("vendorrun")
 }
 
 model Ship {
@@ -132,6 +141,7 @@ model Ship {
   decks          ShipDeck[]
 
   @@index([vendorId])
+  @@map("ship")
 }
 
 model ShipDeck {
@@ -149,6 +159,7 @@ model ShipDeck {
   sections      ShipDeckSection[]
 
   @@index([shipId])
+  @@map("shipdeck")
 }
 
 model ShipDeckSection {
@@ -163,6 +174,7 @@ model ShipDeckSection {
   deck        ShipDeck @relation(fields: [shipDeckId], references: [id])
 
   @@index([shipDeckId])
+  @@map("shipdecksection")
 }
 
 model Cruise {
@@ -219,6 +231,7 @@ model Cruise {
   @@index([vendorId])
   @@index([shipId])
   @@index([cruiseLine])
+  @@map("cruise")
 }
 
 model ItineraryStop {
@@ -235,6 +248,7 @@ model ItineraryStop {
   cruise    Cruise   @relation(fields: [cruiseId], references: [id])
 
   @@index([cruiseId])
+  @@map("itinerarystop")
 }
 
 //////////////////////////////////////////////////////
@@ -250,6 +264,7 @@ model CruisePromotion {
   cruise    Cruise @relation(fields: [cruiseId], references: [id])
 
   @@index([cruiseId])
+  @@map("cruisepromotion")
 }
 
 //////////////////////////////////////////////////////
@@ -288,6 +303,7 @@ model CabinCategory {
 
   @@index([cruiseId])
   @@unique([cruiseId, code])
+  @@map("cabincategory")
 }
 
 model Cabin {
@@ -303,6 +319,7 @@ model Cabin {
 
   @@index([cabinCategoryId])
   @@unique([cabinCategoryId, cabinNumber])
+  @@map("cabin")
 }
 
 //////////////////////////////////////////////////////
@@ -319,6 +336,7 @@ model CabinPromotion {
   cabinCategory    CabinCategory @relation(fields: [cabinCategoryId], references: [id])
 
   @@index([cabinCategoryId])
+  @@map("cabinpromotion")
 }
 
 //////////////////////////////////////////////////////
@@ -346,6 +364,7 @@ model CruiseTag {
   @@index([cruiseId])
   @@index([label])
   @@index([assignedTo])
+  @@map("cruisetag")
 }
 
 model CruiseTagAlert {
@@ -368,6 +387,7 @@ model CruiseTagAlert {
   @@index([cruiseId])
   @@index([status])
   @@index([createdAt])
+  @@map("cruisetagalert")
 }
 
 // Static itinerary reference data (imported from Book1.xlsx, now editable via
@@ -391,6 +411,7 @@ model StaticItinerary {
 
   @@index([shipKey])
   @@index([shipKey, routeKey])
+  @@map("staticitinerary")
 }
 
 // Port-name synonym mappings so vendor-specific codes (e.g. GOCCL's "MIA",
@@ -405,6 +426,7 @@ model PortAlias {
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([aliasKey])
+  @@map("portalias")
 }
 
 // Runtime-editable app configuration (Dashboard → Settings). Exists so the
